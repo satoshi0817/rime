@@ -48,7 +48,6 @@ struct SettingsView: View {
         .frame(minWidth: 680, minHeight: 500)
         .background(Color(nsColor: .windowBackgroundColor))
         .tint(tint)
-        .animation(reduceMotion || !preferences.subtleMotion ? nil : .smooth(duration: 0.3), value: page)
     }
 
     private var sidebar: some View {
@@ -80,10 +79,12 @@ struct SettingsView: View {
                         .background(page == destination ? tint.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 10))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(destination.rawValue)
                 .accessibilityAddTraits(page == destination ? .isSelected : [])
+                .animation(reduceMotion || !preferences.subtleMotion ? nil : .smooth(duration: 0.22), value: page == destination)
             }
             Spacer()
-            Text("v1.0 · macOS 15+")
+            Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1") · macOS 15+")
                 .font(.system(size: 11))
                 .foregroundStyle(.tertiary)
                 .padding(.leading, 12)
@@ -131,6 +132,8 @@ struct SettingsView: View {
                 instruction(2, "矢印をクリック", "隠した項目の表示と収納を切り替えます。")
                 Divider().padding(.leading, 43)
                 instruction(3, "Option + クリック", "常時隠す項目も一時的に表示します。")
+                Divider().padding(.leading, 43)
+                instruction(4, "右クリックで設定", "Rime の矢印を右クリックすると、いつでも設定を開けます。")
             }
             .glassCard(corner: 20)
 
@@ -192,6 +195,8 @@ struct SettingsView: View {
                 settingRow("起動時に収納", detail: "メニューバーを整理した状態で開始", icon: "rectangle.compress.vertical", toggle: $preferences.startCollapsed)
                 Divider().padding(.leading, 52)
                 settingRow("ログイン時に起動", detail: "Mac にサインインしたら自動で開始", icon: "power", toggle: Binding(get: { preferences.launchAtLogin }, set: { preferences.launchAtLogin = $0 }))
+                Divider().padding(.leading, 52)
+                settingRow("Dock に表示", detail: "設定画面へ戻りやすくする", icon: "dock.rectangle", toggle: $preferences.showDockIcon)
             }
             .glassCard(corner: 20)
 

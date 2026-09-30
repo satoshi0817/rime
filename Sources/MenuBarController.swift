@@ -34,7 +34,7 @@ final class MenuBarController: NSObject {
         toggle.autosaveName = "Rime.Toggle"
         toggle.button?.image = NSImage(systemSymbolName: "chevron.left.2", accessibilityDescription: "Rime の隠し項目")
         toggle.button?.image?.isTemplate = true
-        toggle.button?.toolTip = "クリックで表示 / 収納 · Option クリックですべて表示 · 右クリックでメニュー"
+        toggle.button?.toolTip = "クリックで表示 / 収納 · Option クリックですべて表示 · 右クリックで設定"
         toggle.button?.target = self
         toggle.button?.action = #selector(toggleClicked)
         toggle.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
