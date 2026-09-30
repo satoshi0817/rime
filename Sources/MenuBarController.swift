@@ -114,6 +114,8 @@ final class MenuBarController: NSObject {
                 belowBar = BelowBarController(anchor: toggle.button!, preferences: preferences,
                                               alwaysBoundary: { [weak self] in
                     self?.alwaysDivider.button?.window?.frame.maxX ?? -CGFloat.greatestFiniteMagnitude
+                }, fallbackReveal: { [weak self] in
+                    self?.setExpanded(hidden: true, always: false)
                 })
             }
             belowBar?.toggle(includeAlwaysHidden: all)

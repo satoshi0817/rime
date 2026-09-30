@@ -15,13 +15,16 @@ final class BelowBarController {
     private weak var anchor: NSStatusBarButton?
     private let preferences: Preferences
     private let alwaysBoundary: () -> CGFloat
+    private let fallbackReveal: () -> Void
     private var panel: NSPanel?
     private var includeAlwaysHidden = false
 
-    init(anchor: NSStatusBarButton, preferences: Preferences, alwaysBoundary: @escaping () -> CGFloat) {
+    init(anchor: NSStatusBarButton, preferences: Preferences,
+         alwaysBoundary: @escaping () -> CGFloat, fallbackReveal: @escaping () -> Void) {
         self.anchor = anchor
         self.preferences = preferences
         self.alwaysBoundary = alwaysBoundary
+        self.fallbackReveal = fallbackReveal
     }
 
     func toggle(includeAlwaysHidden: Bool) {
@@ -71,6 +74,7 @@ final class BelowBarController {
             onPress: { [weak self] item in self?.press(item) },
             onRequestAccess: { [weak self] in self?.requestAccess() },
             onRefresh: { [weak self] in self?.show() },
+            onFallback: { [weak self] in self?.showInMenuBar() },
             onClose: { [weak self] in self?.close() }
         ))
         panel?.orderFrontRegardless()
@@ -85,7 +89,12 @@ final class BelowBarController {
     private func press(_ item: ExtraItem) {
         let result = AXUIElementPerformAction(item.element, kAXPressAction as CFString)
         if result == .success { close() }
-        else { NSSound.beep() }
+        else { showInMenuBar() }
+    }
+
+    private func showInMenuBar() {
+        close()
+        fallbackReveal()
     }
 
     private func discoverItems(anchorX: CGFloat, minimumX: CGFloat) -> [ExtraItem] {
@@ -146,6 +155,7 @@ private struct BelowBarView: View {
     let onPress: (ExtraItem) -> Void
     let onRequestAccess: () -> Void
     let onRefresh: () -> Void
+    let onFallback: () -> Void
     let onClose: () -> Void
 
     var body: some View {
@@ -156,6 +166,8 @@ private struct BelowBarView: View {
                 Text(includeAlwaysHidden ? "すべての隠した項目" : "隠した項目")
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
+                Button("バー内で表示", action: onFallback)
+                    .help("元のメニューバーに一時表示")
                 Button(action: onRefresh) { Image(systemName: "arrow.clockwise") }
                     .help("一覧を更新")
                 Button(action: onClose) { Image(systemName: "xmark") }
