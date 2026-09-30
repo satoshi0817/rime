@@ -27,9 +27,11 @@ security find-identity -v -p codesigning | grep -Fq "$identity"
 xcrun notarytool history --keychain-profile "$profile" >/dev/null
 
 version=$(sed -n 's/^[[:space:]]*MARKETING_VERSION: //p' project.yml | head -1)
+[[ -n "$version" ]]
 tag="v$version"
 app="build/DerivedData/Build/Products/Release/Rime.app"
 archive="release/Rime-$version-macOS-universal.zip"
+archive_name="Rime-$version-macOS-universal.zip"
 
 mkdir -p release
 xcodegen generate
@@ -58,12 +60,18 @@ xcrun stapler staple "$app"
 xcrun stapler validate "$app"
 spctl --assess --type execute --verbose=2 "$app"
 ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
-shasum -a 256 "$archive" > "$archive.sha256"
+( cd release && shasum -a 256 "$archive_name" > "$archive_name.sha256" )
 
 if [[ -n "$publish" ]]; then
-    git tag -a "$tag" -m "Rime $version"
+    if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+        git tag -a "$tag" -m "Rime $version"
+    fi
     git push origin HEAD:main "$tag"
-    gh release create "$tag" "$archive" "$archive.sha256" \
-        --title "Rime $version" --notes-file docs/release-notes.md
+    if gh release view "$tag" >/dev/null 2>&1; then
+        gh release upload "$tag" "$archive" "$archive.sha256" --clobber
+    else
+        gh release create "$tag" "$archive" "$archive.sha256" \
+            --title "Rime $version" --notes-file docs/release-notes.md
+    fi
 fi
 echo "Ready: $archive"
