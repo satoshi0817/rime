@@ -25,6 +25,7 @@ final class Preferences: ObservableObject {
     @Published var startCollapsed = true { didSet { save("startCollapsed", startCollapsed) } }
     @Published var subtleMotion = true { didSet { save("subtleMotion", subtleMotion) } }
     @Published var accent = 0 { didSet { save("accent", accent) } }
+    @Published var revealLocation = 0 { didSet { save("revealLocation", revealLocation) } }
 
     var launchAtLogin: Bool {
         get { SMAppService.mainApp.status == .enabled }
@@ -49,6 +50,7 @@ final class Preferences: ObservableObject {
         if defaults.object(forKey: "startCollapsed") != nil { startCollapsed = defaults.bool(forKey: "startCollapsed") }
         if defaults.object(forKey: "subtleMotion") != nil { subtleMotion = defaults.bool(forKey: "subtleMotion") }
         if defaults.object(forKey: "accent") != nil { accent = defaults.integer(forKey: "accent") }
+        if defaults.object(forKey: "revealLocation") != nil { revealLocation = defaults.integer(forKey: "revealLocation") }
     }
 
     private func save(_ key: String, _ value: Any) { defaults.set(value, forKey: key) }

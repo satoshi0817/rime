@@ -167,6 +167,25 @@ struct SettingsView: View {
 
     private var behavior: some View {
         VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 13) {
+                Text("隠した項目の表示場所").font(.system(size: 13, weight: .semibold))
+                Picker("表示場所", selection: $preferences.revealLocation) {
+                    Label("メニューバー内", systemImage: "menubar.rectangle").tag(0)
+                    Label("メニューバーの下", systemImage: "rectangle.bottomhalf.inset.filled").tag(1)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                Text(preferences.revealLocation == 0
+                     ? "元のアイコンをメニューバー内に広げます。ノッチのある Mac では一部が重なる場合があります。"
+                     : "ノッチを避け、メニューバーの下に専用のパネルを表示します。項目の取得と操作にアクセシビリティの許可が必要です。")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .glassCard(corner: 20)
+
             VStack(spacing: 0) {
                 settingRow("常時隠す区画", detail: "普段は表示しない項目用の仕切りを追加", icon: "eye.slash", toggle: $preferences.alwaysHiddenEnabled)
                 Divider().padding(.leading, 52)
@@ -256,7 +275,7 @@ struct SettingsView: View {
                 Text("Rime").font(.system(size: 22, weight: .bold, design: .rounded))
                 Text("必要なアイコンを、必要なときに。")
                     .font(.system(size: 13)).foregroundStyle(.secondary)
-                Text("Rime は macOS のステータスアイテムを仕切りとして利用します。画面収録・アクセシビリティ権限・ネットワーク接続なしで、メニューバーを整理できます。")
+                Text("Rime は macOS のステータスアイテムを仕切りとして利用します。標準表示は追加権限なし。下部パネルでは項目の検出と操作にアクセシビリティ許可を使います。画面収録とネットワーク接続は使いません。")
                     .font(.system(size: 12)).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }

@@ -13,6 +13,7 @@ final class MenuBarController: NSObject {
     private var alwaysExpanded = false
     private var collapseTimer: Timer?
     private var observations = Set<AnyCancellable>()
+    private var belowBar: BelowBarController?
     private let compactWidth: CGFloat = 12
     private let concealedWidth: CGFloat = 10_000
 
@@ -69,6 +70,10 @@ final class MenuBarController: NSObject {
         }.store(in: &observations)
         preferences.$autoCollapse.dropFirst().sink { [weak self] _ in self?.scheduleCollapse() }.store(in: &observations)
         preferences.$collapseDelay.dropFirst().sink { [weak self] _ in self?.scheduleCollapse() }.store(in: &observations)
+        preferences.$revealLocation.dropFirst().sink { [weak self] _ in
+            self?.belowBar?.close()
+            self?.setExpanded(hidden: false, always: false)
+        }.store(in: &observations)
     }
 
     private func startPointerMonitor() {
@@ -97,9 +102,23 @@ final class MenuBarController: NSObject {
         if event?.type == .rightMouseUp || event?.modifierFlags.contains(.control) == true {
             showContextMenu()
         } else if event?.modifierFlags.contains(.option) == true {
-            setExpanded(hidden: true, always: true)
+            reveal(all: true)
         } else {
-            setExpanded(hidden: !hiddenExpanded, always: false)
+            reveal(all: false)
+        }
+    }
+
+    private func reveal(all: Bool) {
+        if preferences.revealLocation == 1 {
+            if belowBar == nil {
+                belowBar = BelowBarController(anchor: toggle.button!, preferences: preferences,
+                                              alwaysBoundary: { [weak self] in
+                    self?.alwaysDivider.button?.window?.frame.maxX ?? -CGFloat.greatestFiniteMagnitude
+                })
+            }
+            belowBar?.toggle(includeAlwaysHidden: all)
+        } else {
+            setExpanded(hidden: !hiddenExpanded || all, always: all)
         }
     }
 
@@ -119,12 +138,13 @@ final class MenuBarController: NSObject {
         NSMenu.popUpContextMenu(menu, with: NSApp.currentEvent ?? NSEvent(), for: toggle.button!)
     }
 
-    @objc private func toggleHidden() { setExpanded(hidden: !hiddenExpanded, always: false) }
-    @objc private func showAll() { setExpanded(hidden: true, always: true) }
+    @objc private func toggleHidden() { reveal(all: false) }
+    @objc private func showAll() { reveal(all: true) }
     @objc private func openSettingsAction() { openSettings() }
     @objc private func quit() { NSApp.terminate(nil) }
 
     private func setExpanded(hidden: Bool, always: Bool) {
+        belowBar?.close()
         hiddenExpanded = hidden
         alwaysExpanded = always && preferences.alwaysHiddenEnabled
         animate(hiddenDivider, to: hiddenExpanded ? compactWidth : concealedWidth)

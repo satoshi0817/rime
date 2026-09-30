@@ -10,11 +10,15 @@
 		35E9678E7147486F86B0BFA7 /* RimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3A0B93509EDA895277D9F /* RimeApp.swift */; };
 		52680DC5124115CAC549894D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E62C814182B156B605FB422 /* SettingsView.swift */; };
 		60EFF864D1E70B83590EC73A /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CDCD1765E643EC93951DD /* MenuBarController.swift */; };
+		955729C0EE9EE33D5492E269 /* BelowBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7BF7579283427549F62BE3 /* BelowBarController.swift */; };
+		ACFE315C6123E8424FC3255B /* Rime.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9C04718D2F41E8AEE736DE26 /* Rime.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2E62C814182B156B605FB422 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		89D3A0B93509EDA895277D9F /* RimeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RimeApp.swift; sourceTree = "<group>"; };
+		8C7BF7579283427549F62BE3 /* BelowBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BelowBarController.swift; sourceTree = "<group>"; };
+		9C04718D2F41E8AEE736DE26 /* Rime.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Rime.icns; sourceTree = "<group>"; };
 		EC921E0D92DE881D14B27C66 /* Rime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA9CDCD1765E643EC93951DD /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -23,11 +27,20 @@
 		39B6891347EB19B41A638FC2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8C7BF7579283427549F62BE3 /* BelowBarController.swift */,
 				FA9CDCD1765E643EC93951DD /* MenuBarController.swift */,
 				89D3A0B93509EDA895277D9F /* RimeApp.swift */,
 				2E62C814182B156B605FB422 /* SettingsView.swift */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		4A389B38CE768623F2299695 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9C04718D2F41E8AEE736DE26 /* Rime.icns */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		C78B4D9793175E73D2C08591 /* Products */ = {
@@ -41,6 +54,7 @@
 		CCB1BBD59E51202A287198AA = {
 			isa = PBXGroup;
 			children = (
+				4A389B38CE768623F2299695 /* Resources */,
 				39B6891347EB19B41A638FC2 /* Sources */,
 				C78B4D9793175E73D2C08591 /* Products */,
 			);
@@ -54,6 +68,7 @@
 			buildConfigurationList = D51FAB3DECD634076E8FE759 /* Build configuration list for PBXNativeTarget "Rime" */;
 			buildPhases = (
 				230BE0A357B12AC6E69CA1FC /* Sources */,
+				6D0EA46C881B50DB33E3BC65 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -100,11 +115,23 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		6D0EA46C881B50DB33E3BC65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACFE315C6123E8424FC3255B /* Rime.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		230BE0A357B12AC6E69CA1FC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				955729C0EE9EE33D5492E269 /* BelowBarController.swift in Sources */,
 				60EFF864D1E70B83590EC73A /* MenuBarController.swift in Sources */,
 				35E9678E7147486F86B0BFA7 /* RimeApp.swift in Sources */,
 				52680DC5124115CAC549894D /* SettingsView.swift in Sources */,
@@ -149,8 +176,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -167,10 +196,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Rime;
-				INFOPLIST_KEY_LSUIElement = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -248,8 +277,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -260,10 +291,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Rime;
-				INFOPLIST_KEY_LSUIElement = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.satoshi0817.Rime;

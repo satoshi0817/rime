@@ -26,17 +26,18 @@
 5. 起動時収納とログイン時起動を設定できる。
 6. 設定画面はネイティブ UI を使い、macOS 26 以降は Liquid Glass に対応する。
 7. 画面のモーションは短いイージングで操作を補助し、macOS の「視差効果を減らす」を尊重する。項目を押し出す仕切りの変化は、再配置の揺れを防ぐため即時にする。
+8. 表示先はメニューバー内と下部パネルから選べる。下部パネルはノッチの下に配置し、項目名と操作にアクセシビリティを使う。許可は利用者が明示的に与える。
 
 ### 次の段階
 
 1. システムのホットキー登録。
 2. ノッチのある Mac と複数ディスプレイでのレイアウト検証。
-3. 項目名・画像を扱う検索と追加バー。権限の必要性、OS ごとの差分、利用者への説明を先に設計する。
+3. 項目検索と各アプリ固有のステータス画像表示。画面収録権限の必要性、OS ごとの差分、利用者への説明を先に設計する。
 4. プロファイルと条件付きトリガー。永続化する区画識別子の安定性を検証する。
 5. 署名、公証、配布用の更新経路。
 
 ## 技術上の境界
 
-Apple の [`NSStatusItem`](https://developer.apple.com/documentation/appkit/nsstatusitem) はアプリ自身の項目を作る公開 API で、他アプリのステータスアイテムを直接管理する API ではない。Rime は自分の仕切りの幅と位置だけを操作する。Liquid Glass は Apple の [`glassEffect`](https://developer.apple.com/documentation/swiftui/glasseffectcontainer) を使い、古い OS ではシステム素材に切り替える。
+Apple の [`NSStatusItem`](https://developer.apple.com/documentation/appkit/nsstatusitem) はアプリ自身の項目を作る公開 API で、他アプリのステータスアイテムを直接管理する API ではない。Rime は自分の仕切りの幅と位置だけを操作する。下部パネルは [Accessibility API](https://developer.apple.com/documentation/applicationservices/axuielement_h) で公開された項目を読み取り、利用者が選んだ項目へ AXPress を送る。アプリによって公開情報や応答が異なる可能性がある。Liquid Glass は Apple の [`glassEffect`](https://developer.apple.com/documentation/swiftui/glasseffectcontainer) を使い、古い OS ではシステム素材に切り替える。
 
 添付されたモーションガイドから、色数を絞る、画面ごとに焦点を一つにする、操作とつながる自然なイージングを採用した。音と動画の納品に関する項目はアプリには適用しない。
