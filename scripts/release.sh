@@ -53,9 +53,9 @@ ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
 
 xcrun notarytool submit "$archive" --keychain-profile "$profile" --wait \
     --output-format json > release/notarization-result.json
-status=$(/usr/bin/plutil -extract status raw -o - release/notarization-result.json)
-if [[ "$status" != "Accepted" ]]; then
-    echo "Notarization status: $status" >&2
+notarization_status=$(/usr/bin/plutil -extract status raw -o - release/notarization-result.json)
+if [[ "$notarization_status" != "Accepted" ]]; then
+    echo "Notarization status: $notarization_status" >&2
     exit 1
 fi
 xcrun stapler staple "$app"
