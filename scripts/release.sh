@@ -23,7 +23,8 @@ if [[ -n "$publish" ]] && ! gh repo view >/dev/null; then
 fi
 
 identity="Developer ID Application: SATOSHI SUZUKI (4LPTZP2QZM)"
-security find-identity -v -p codesigning | grep -Fq "$identity"
+identities=$(security find-identity -v -p codesigning)
+[[ "$identities" == *"$identity"* ]]
 xcrun notarytool history --keychain-profile "$profile" >/dev/null
 
 version=$(sed -n 's/^[[:space:]]*MARKETING_VERSION: //p' project.yml | head -1)
@@ -45,8 +46,9 @@ xcodebuild -project Rime.xcodeproj -scheme Rime -configuration Release \
 [[ "$(lipo -archs "$app/Contents/MacOS/Rime")" == *x86_64* ]]
 codesign --force --sign "$identity" --options runtime --timestamp "$app"
 codesign --verify --deep --strict --verbose=2 "$app"
-codesign -dv --verbose=4 "$app" 2>&1 | grep -Fq 'flags=0x10000(runtime)'
-codesign -dv --verbose=4 "$app" 2>&1 | grep -Fq 'Timestamp='
+signature=$(codesign -dv --verbose=4 "$app" 2>&1)
+[[ "$signature" == *'flags=0x10000(runtime)'* ]]
+[[ "$signature" == *'Timestamp='* ]]
 ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
 
 xcrun notarytool submit "$archive" --keychain-profile "$profile" --wait \
